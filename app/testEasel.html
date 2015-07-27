@@ -1,0 +1,56 @@
+<html>
+	<head>
+
+<style>
+
+.attribute_editor {
+     overflow:auto;
+}
+
+</style>
+<script src="https://code.createjs.com/easeljs-0.8.1.min.js"></script>
+
+</head>
+
+<body>
+
+          <div class="canvasHolder four wide ui center aligned  segment">
+            <canvas id="CANVAS" 
+                    width="800" height="400"
+                    style="background-color:aquamarine;">
+            </canvas>
+          </div>
+
+
+<script type="text/javascript">
+
+    //Create a stage by getting a reference to the canvas
+    stage = new createjs.Stage("CANVAS");
+    //Create a Shape DisplayObject.
+    circle = new createjs.Shape();
+    circle.graphics.beginFill("red").drawCircle(0, 0, 40);
+    //Set position of Shape instance.
+    circle.x = circle.y = 50;
+    //Add Shape instance to stage display list.
+    stage.addChild(circle);
+    //Update stage will render next frame
+    stage.update();
+
+ circle.addEventListener("click", handleClick);
+ function handleClick(event){
+  console.log("blabla");
+ }
+
+ circle.addEventListener("mousedown", handlePress);
+ function handlePress(event) {
+     // A mouse press happened.
+     // Listen for mouse move while the mouse is down:
+     event.addEventListener("mousemove", handleMove);
+ }
+ function handleMove(event) {
+     // Check out the DragAndDrop example in GitHub for more
+ }
+
+</script>
+</body>
+</html>
