@@ -27,10 +27,9 @@ require( ['jquery', 'createjs', 'preload', '../js/character', 'tween'],
             tween       = require('tween'),
             character   = require('../js/character');
 
-    var stage, circle;
     var imagesLoaded = false;
     var imagescount = 2;
-    var preload;
+    var stage, preload, guy, charDir;
 
     function handleFileComplete(event) {
         console.log("fileload complete");
@@ -53,7 +52,15 @@ require( ['jquery', 'createjs', 'preload', '../js/character', 'tween'],
         preload.addEventListener("fileload", handleFileComplete);
         preload.loadFile({id:"bg", src:"assets/bgs/Ghost Trick Supers Office.png"});
         preload.loadFile({id:"guybrush_sprite", src:"assets/sprites/gb_walk.png"});
-    //    preload.load();
+    }
+
+    function setHorisontalDirection(x, targetx) {
+        charDir = ((x - targetx) >= 0 ? 1 : -1);
+    }
+
+    function stopCharacterInDir(){
+        if(charDir <= 0){ guy.gotoAndPlay("standRight");}
+        else { guy.gotoAndPlay("standLeft");}
     }
 
     function render() {
@@ -63,47 +70,45 @@ require( ['jquery', 'createjs', 'preload', '../js/character', 'tween'],
 
             stage = new createjs.Stage("CANVAS");
             var BOTTOM = 200;
-            circle = new createjs.Shape();
-            circle.graphics.beginFill("red").drawCircle(0, 0, 40);
-            circle.x = circle.y = 50;
-            stage.addChild(circle);
-
             var roomBg = new createjs.Bitmap(preload.getResult("bg"));
             stage.addChild(roomBg);
             createjs.Ticker.addEventListener("tick", handleTick);
 
             var data = {
                 images: [preload.getResult("guybrush_sprite")],
-                frames: {width:104, height:151},
-                framerate: 5,
+                frames: {width:104, height:150},
                 animations: {
-                    standRight:0,
+                    standRight:12,
                     standLeft:13,
-                    runRight:[0,5],
-                    runLeft:[6,11]
-
+                    walkRight:[0,5],
+                    walkLeft:[6,11]
                 }
             };
 
-
-
             var spriteSheet = new createjs.SpriteSheet(data);
-            var guy = new createjs.Sprite(spriteSheet, "walkRight");
+            guy = new createjs.Sprite(spriteSheet, "standRight");
+            guy.framerate = 12;
             stage.addChild(guy);
 
             guy.setTransform(BOTTOM, 200);
 
             function handleTick(event) {
-              //  image.x += 1;
                 stage.update();
-            } 
+            }
 
             roomBg.addEventListener("click", handleClick);
             function handleClick(event){
-                createjs.Tween.get(guy).to({ x: event.stageX-25, y: BOTTOM }, 1000);
 
-            //    guy.setTransform(event.stageX-25, BOTTOM)
-                console.log("blabla");
+                var targetX = event.stageX-25;
+                var dist = Math.abs(guy.x - event.stageX)-25;
+                setHorisontalDirection(guy.x, event.stageX);
+
+                if(charDir <= 0){ guy.gotoAndPlay("walkRight"); console.log("walkRight");}
+                else { guy.gotoAndPlay("walkLeft"); console.log("walkLeft");}
+
+                createjs.Tween.get(guy, {override:true})
+                        .to({ x: targetX, y: BOTTOM }, dist*guy.framerate)
+                        .call(stopCharacterInDir);
             }
 
             stage.addEventListener("mousedown", handlePress);
