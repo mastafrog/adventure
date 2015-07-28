@@ -9,8 +9,6 @@
 
 </style>
 <script src="libs/jquery-2.1.4.min.js"></script>
-<script src="libs/semantic-ui-2.0.3/semantic.min.js"></script>
-<script src="libs/semantic-ui-2.0.3/accordion.min.js"></script>
 <script data-main="js/main.js" src="libs/require.min.js"></script>
 <link rel="stylesheet" type="text/css" href="libs/semantic-ui-2.0.3/semantic.min.css">
 <link rel="stylesheet" type="text/css" href="libs/semantic-ui-2.0.3/accordion.min.css">
@@ -19,7 +17,11 @@
 
 <body>
 
-
+<style>
+	.canvasHolder {
+		overflow: hidden;
+	}
+</style>
 
     <div class="ui internally celled grid">
 
@@ -28,7 +30,7 @@
 
           <div class="ui grid">
             <div class="ui three column row">
-              <div class="column">buttons</div>
+              <div class="column">Editor Buttons</div>
               <div class="center aligned column"><h1>HAUNTED CABIN</h1> </div>
 
               <div class="floated right aligned column">
@@ -43,13 +45,17 @@
             </div>
           </div>
 
-          <div class="canvasHolder four wide ui center aligned  segment">
-            <canvas id="CANVAS" 
-                    width="800" height="400"
-                    style="background-color:aquamarine;">
-            </canvas>
-          </div>
-        </div>
+<div class="ui segment">
+		<div class="ui center aligned active dimmer" style="min-height: 428px;">
+            <div class="canvasHolder four wide ui center aligned loader inverted segment">
+			</div>
+		</div>
+</div>
+		
+		
+		</div>
+
+
 
     <!-- ATTRIBUTE EDITOR -->
 
@@ -76,8 +82,8 @@
             <div class="item">
               <img class="ui avatar image" src="assets/avatars/small/christian.jpg">
               <div class="content">
-                <div class="header">Christian Rocha</div>
-                Admin
+                <div class="header">Guy Brush</div>
+                Pirat
               </div>
             </div>
             <div class="item">
@@ -114,22 +120,16 @@
 
   </div>
 <div class="Content">
-   blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah...
+   blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah... ..blah blah blah...
   </div>
         </div>
     </div>
 
 
-    <div class="ui raised segment">
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-    </div>
-
 
 <div class="ui celled grid">
   <div class="row">
     <div class="three wide column">
-
-
 
 
 
@@ -152,18 +152,20 @@
 </div>
 
 
-
-
-
-
-
-
 </body>
+
+
+<script src="libs/semantic-ui-2.0.3/semantic.min.js"></script>
+<script src="libs/semantic-ui-2.0.3/accordion.min.js"></script>
+
 <script type="text/javascript">
+//UI STUFF
 
-  $(document).ready(function() {
+    $(document).ready(function() {
       $('.ui.accordion').accordion();
-  });
-
+    });
+	
 </script>
+
+
 </html>

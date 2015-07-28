@@ -27,12 +27,14 @@ require( ['jquery', 'createjs', 'preload', '../js/character', 'tween'],
             tween       = require('tween'),
             character   = require('../js/character');
 
+
     var imagesLoaded = false;
     var imagescount = 2;
     var stage, preload, guy, charDir;
 
+
+// GAME
     function handleFileComplete(event) {
-        console.log("fileload complete");
         var item = event.item; // A reference to the item that was passed in to the LoadQueue
         var type = item.type;
 
@@ -41,17 +43,19 @@ require( ['jquery', 'createjs', 'preload', '../js/character', 'tween'],
              imagescount -= 1;
          }
          if (imagescount === 0){
-            console.log("render");
+            $(".active.dimmer").removeClass("active, dimmer");
+            $(".canvasHolder").removeClass("loader");
+            $(".canvasHolder").append('<canvas id="CANVAS" width="800" height="400" style="background-color:aquamarine;"></canvas>');
             render();
-
          }
     } 
 
     function loadImages() {
         preload = new createjs.LoadQueue();
-        preload.addEventListener("fileload", handleFileComplete);
         preload.loadFile({id:"bg", src:"assets/bgs/Ghost Trick Supers Office.png"});
         preload.loadFile({id:"guybrush_sprite", src:"assets/sprites/gb_walk.png"});
+        preload.addEventListener("fileload", handleFileComplete);
+
     }
 
     function setHorisontalDirection(x, targetx) {
@@ -64,6 +68,7 @@ require( ['jquery', 'createjs', 'preload', '../js/character', 'tween'],
     }
 
     function render() {
+
         var Char = new character;
 
         $(document).ready(function() {
@@ -98,26 +103,28 @@ require( ['jquery', 'createjs', 'preload', '../js/character', 'tween'],
 
             roomBg.addEventListener("click", handleClick);
             function handleClick(event){
-
-                var targetX = event.stageX-25;
-                var dist = Math.abs(guy.x - event.stageX)-25;
+                var targetX = event.stageX-guy.getBounds()['width']/2;
+                var dist = Math.abs(guy.x - event.stageX);
                 setHorisontalDirection(guy.x, event.stageX);
 
                 if(charDir <= 0){ guy.gotoAndPlay("walkRight"); console.log("walkRight");}
                 else { guy.gotoAndPlay("walkLeft"); console.log("walkLeft");}
 
                 createjs.Tween.get(guy, {override:true})
-                        .to({ x: targetX, y: BOTTOM }, dist*guy.framerate)
+                        .to({ x: targetX, y: BOTTOM }, dist*3)
                         .call(stopCharacterInDir);
             }
 
-            stage.addEventListener("mousedown", handlePress);
             function handlePress(event) {                           // A mouse press happened.
-                event.addEventListener("mousemove", handleMove);    // Listen for mouse move while the mouse is down:
+                console.log("handlePress: " + event);
+                roomBg.addEventListener("mousemove", handleMove);    // Listen for mouse move while the mouse is down:
             }
+            
             function handleMove(event) {
                 console.log(event);
             }
+            
+            stage.addEventListener("mousedown", handlePress);
 
             stage.update();
             });
@@ -126,7 +133,5 @@ require( ['jquery', 'createjs', 'preload', '../js/character', 'tween'],
     function init() {
         loadImages();
     };
-
-    init(); 
-
+    init();
 });
