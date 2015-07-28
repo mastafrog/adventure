@@ -6,9 +6,8 @@ requirejs.config({
     paths: {
         main  : 'main' ,
         jquery: '../libs/jquery-2.1.4.min',
-//      createjs: '../libs/createjs-2015.05.21.min'
         createjs: '../libs/easeljs-0.8.1.min',
-        preload: 'preloadjs-0.6.1.min.js'
+        preload: '../libs/preloadjs-0.6.1.min'
       
     },
     shim: {
@@ -31,20 +30,36 @@ require( ['jquery', 'createjs', 'preload', '../js/character'],
             character   = require('../js/character');
 
     var stage, circle;
-    
+    var imagesLoaded = false;
+    var imagescount = 2;
+    var preload;
+
     function handleFileComplete(event) {
-        console.log("fileload complete")
+        console.log("fileload complete");
+        var item = event.item; // A reference to the item that was passed in to the LoadQueue
+        var type = item.type;
+
+         // Add any images to the page body.
+         if (type == createjs.LoadQueue.IMAGE) {
+             document.body.appendChild(event.result);
+             imagescount -= 1;
+         }
+         if (imagescount === 0){
+            console.log("render");
+            render();
+
+         }
     } 
 
-    function loadImage() {
-        var preload = new createjs.LoadQueue();
+    function loadImages() {
+        preload = new createjs.LoadQueue();
         preload.addEventListener("fileload", handleFileComplete);
-        preload.loadFile("assets/bgs/Ghost Trick Supers Office.png");
-        preload.loadFile("assets/sprites/gb_walk.png");
+        preload.loadFile({id:"bg", src:"assets/bgs/Ghost Trick Supers Office.png"});
+        preload.loadFile({id:"guybrush_sprite", src:"assets/sprites/gb_walk.png"});
+    //    preload.load();
     }
 
-
-    function init() {
+    function render() {
         var Char = new character;
 
         $(document).ready(function() {
@@ -56,16 +71,16 @@ require( ['jquery', 'createjs', 'preload', '../js/character'],
             circle.x = circle.y = 50;
             stage.addChild(circle);
 
-            var image = new createjs.Bitmap("assets/bgs/Ghost Trick Supers Office.png");
-            stage.addChild(image);
+            var roomBg = new createjs.Bitmap(preload.getResult("bg"));
+            stage.addChild(roomBg);
             createjs.Ticker.addEventListener("tick", handleTick);
 
             var data = {
-                images: ["assets/sprites/gb_walk.png"],
+                images: [preload.getResult("guybrush_sprite")],
                 frames: {width:104, height:151},
                 framerate: 5,
                 animations: {
-                    standRight:12,
+                    standRight:0,
                     standLeft:13,
                     runRight:[0,5],
                     runLeft:[6,11]
@@ -76,7 +91,7 @@ require( ['jquery', 'createjs', 'preload', '../js/character'],
 
 
             var spriteSheet = new createjs.SpriteSheet(data);
-            var animation = new createjs.Sprite(spriteSheet, "standRight");
+            var animation = new createjs.Sprite(spriteSheet, "walkRight");
             stage.addChild(animation);
 
             animation.setTransform(BOTTOM, 200);
@@ -86,14 +101,15 @@ require( ['jquery', 'createjs', 'preload', '../js/character'],
                 stage.update();
             } 
 
-            circle.addEventListener("click", handleClick);
+            roomBg.addEventListener("click", handleClick);
             function handleClick(event){
+                animation.setTransform(event.stageX-25, BOTTOM)
                 console.log("blabla");
             }
 
             stage.addEventListener("mousedown", handlePress);
-            function handlePress(event) {             // A mouse press happened.
-                event.addEventListener("mousemove", handleMove);             // Listen for mouse move while the mouse is down:
+            function handlePress(event) {                           // A mouse press happened.
+                event.addEventListener("mousemove", handleMove);    // Listen for mouse move while the mouse is down:
             }
             function handleMove(event) {
                 console.log(event);
@@ -101,8 +117,12 @@ require( ['jquery', 'createjs', 'preload', '../js/character'],
 
             stage.update();
             });
+    }
 
+    function init() {
+        loadImages();
     };
 
     init(); 
+
 });

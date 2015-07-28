@@ -1,0 +1,22 @@
+{
+  "name": "Adventure",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mastafrog/adventure.git"
+  },
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "connect": "",
+    "express": "^4.10.7",
+    "redis": ">=0",
+    "serve-static": "*",
+    "socket.io": "*"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  }
+}
