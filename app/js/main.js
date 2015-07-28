@@ -5,28 +5,26 @@ requirejs.config({
     baseUrl: 'app',
     paths: {
         main  : 'main' ,
-        jquery: '../libs/jquery-2.1.4.min',
-        createjs: '../libs/easeljs-0.8.1.min',
-        preload: '../libs/preloadjs-0.6.1.min'
-      
+        jquery:     '../libs/jquery-2.1.4.min',
+        createjs:   '../libs/easeljs-0.8.1.min',
+        preload:    '../libs/preloadjs-0.6.1.min',
+        tween:      '../libs/tweenjs-0.6.1.min'
     },
     shim: {
-        createjs: {
-            exports: 'createjs'
-        },
-        preload: {
-            exports: 'preload'
+        createjs:   {exports: 'createjs'},
+        preload:    {exports: 'preload'},
+        tween:      {exports: 'tween'}
         }
 
-    }
-});
+    });
 
 
-require( ['jquery', 'createjs', 'preload', '../js/character'],
+require( ['jquery', 'createjs', 'preload', '../js/character', 'tween'],
     function() {
         var $           = require('jquery'), 
             createjs    = require('createjs'),
-            preload    = require('preload'),
+            preload     = require('preload'),
+            tween       = require('tween'),
             character   = require('../js/character');
 
     var stage, circle;
@@ -41,7 +39,6 @@ require( ['jquery', 'createjs', 'preload', '../js/character'],
 
          // Add any images to the page body.
          if (type == createjs.LoadQueue.IMAGE) {
-             document.body.appendChild(event.result);
              imagescount -= 1;
          }
          if (imagescount === 0){
@@ -91,10 +88,10 @@ require( ['jquery', 'createjs', 'preload', '../js/character'],
 
 
             var spriteSheet = new createjs.SpriteSheet(data);
-            var animation = new createjs.Sprite(spriteSheet, "walkRight");
-            stage.addChild(animation);
+            var guy = new createjs.Sprite(spriteSheet, "walkRight");
+            stage.addChild(guy);
 
-            animation.setTransform(BOTTOM, 200);
+            guy.setTransform(BOTTOM, 200);
 
             function handleTick(event) {
               //  image.x += 1;
@@ -103,7 +100,9 @@ require( ['jquery', 'createjs', 'preload', '../js/character'],
 
             roomBg.addEventListener("click", handleClick);
             function handleClick(event){
-                animation.setTransform(event.stageX-25, BOTTOM)
+                createjs.Tween.get(guy).to({ x: event.stageX-25, y: BOTTOM }, 1000);
+
+            //    guy.setTransform(event.stageX-25, BOTTOM)
                 console.log("blabla");
             }
 
